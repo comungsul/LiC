@@ -13,7 +13,7 @@
 ![Python: Version](https://img.shields.io/badge/python-3.9.5-blue)
 ![Docker: Version](https://img.shields.io/badge/docker-3.9-blue)
 
-
+프로젝트 배포 및 연동자 홍성민 
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
