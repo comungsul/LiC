@@ -14,6 +14,8 @@
 ![Docker: Version](https://img.shields.io/badge/docker-3.9-blue)
 
 프로젝트 배포 및 연동자 홍성민 
+LiC API 제작 및 크롤링 배준일, 한상우
+
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
