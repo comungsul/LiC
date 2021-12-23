@@ -1,7 +1,11 @@
-version: "3.9"
+version: "3.7"
 volumes:
   mongodb-data:
     name: mongodb-data
+networks:
+  sw-stack:
+    external:
+      name: mon_net 
 
 services:
   mongodb:
@@ -14,7 +18,9 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
     ports:
-      - 27017:27017
+      - 27020:27017
+    networks:
+        - sw-stack 
     # healthcheck:
     #   test: echo 'db.runCommand("ping").ok' | mongo 10.10.10.60:27017/test --quiet
     #   interval: 30s
@@ -25,6 +31,8 @@ services:
     image: mongo-express
     container_name: mongodb-express
     restart: unless-stopped
+    networks:
+      - sw-stack
     environment:
       ME_CONFIG_MONGODB_SERVER: mongodb
       ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
@@ -37,7 +45,7 @@ services:
     depends_on:
       - mongodb
     ports:
-      - 8081:8081
+      - 8090:8081
   # healthcheck:
   #   test:  wget --quiet --tries=3 --spider http://admin:admin123@10.10.10.60:8081 || exit 1
   #   interval: 30s
@@ -46,32 +54,26 @@ services:
   #   restart: unless-stopped
  
   spider_1:
-    image: app
+    image: seanhong2000/app
     build: .
     command: bash -c "cd stackspider && scrapy crawl programmersbot"
     volumes:
       - .:/backend
     depends_on: 
       - mongodb
+    networks:
+      - sw-stack
 
   spider_2:
-    image: app
+    image: seanhong2000/app
     build: .
     command: bash -c "cd stackspider && scrapy crawl jumpitbot"
     volumes:
       - .:/backend
     depends_on: 
       - mongodb
-
-
-  spider_3:
-    image: app
-    build: .
-    command: bash -c "cd stackspider && scrapy crawl kiwizzlebot"
-    volumes:
-      - .:/backend
-    depends_on: 
-      - mongodb
+    networks:
+      - sw-stack
 
   # 번역 자동화 할거면 이런식으로 할 생각이다.
   # translate:
@@ -85,7 +87,7 @@ services:
   
 
   web:
-    image: app
+    image: seanhong2000/app
     build: .
     command: bash -c "cd backend && python manage.py runserver 0.0.0.0:8000"
     volumes:
@@ -97,11 +99,15 @@ services:
       USERNAME: root
       PASSWORD: example
     ports:
-      - "8000:8000"
+      - "8010:8000"
     expose: 
-      - "8000"
+      - "8010"
     depends_on:
       - mongodb
+    networks:
+      - sw-stack
+    deploy:
+      replicas: 3
 
   # migration:
   #   build: .

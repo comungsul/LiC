@@ -73,6 +73,7 @@ LOG_LEVEL = "INFO"
 #    #'stackspider.pipelines.MongoDBPipeline': 800,
 # }
 MONGODB_SERVER = "mongodb://mongodb"
+# MONGODB_SERVER = "mongodb://default"
 MONGODB_PORT = 27017
 MONGODB_DB = "stackdb"
 USERNAME = "root"
